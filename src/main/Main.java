@@ -19,8 +19,9 @@ public class Main {
 			while (myScanner.hasNextLine()) {
 				String expression = myScanner.nextLine();
 				System.out.println(expression);
-				MyLinkedTree tree = createTree(expression);
+				MyLinkedTree<String> tree = createTree(expression);
 				tree.print();
+				tree.printTreeWithText();
 				System.out.println(expression + " = " + calculateTree(tree));
 				System.out.println("------------------------");
 			}
@@ -55,39 +56,47 @@ public class Main {
 
 	}
 
-	public static int calculateTree(MyLinkedTree tree) {
+	public static int calculateTree(MyLinkedTree<String> tree) {
 		return calculateTree(tree.getRoot());
 	}
 
 	private static int calculateTree(MyNode<String> temp) {
 		if (temp == null)
 			return 0;
-	
-		int leftVal = calculateTree(temp.getLeftChild());
-		int rightVal = calculateTree(temp.getRightChild());
+		try {
+			//System.out.println("tempval: " + temp.getValue());
+			int leftVal = calculateTree(temp.getLeftChild());
+			//System.out.println("leftCHild: " + temp.getLeftChild());
+			int rightVal = calculateTree(temp.getRightChild());
+			//System.out.println("rightChild: " + temp.getRightChild());
 
-		if (temp.getValue() == "+") {
-			return leftVal + rightVal;
-		} else if (temp.getValue() == "-") {
-			return leftVal - rightVal;
-		} else if (temp.getValue() == "*") {
-			return leftVal * rightVal;
-		} else if (temp.getValue() == "/") {
-			return leftVal / rightVal;
-		} else if (temp.getValue() == "^") {
-			return (int) Math.pow(leftVal, rightVal);
+			if (temp.getValue() == "+") {
+				return leftVal + rightVal;
+			} else if (temp.getValue() == "-") {
+				return leftVal - rightVal;
+			} else if (temp.getValue() == "*") {
+				return leftVal * rightVal;
+			} else if (temp.getValue() == "/") {
+				return leftVal / rightVal;
+			} else if (temp.getValue() == "^") {
+				return (int) Math.pow(leftVal, rightVal);
+			}
+
+			return Integer.parseInt(temp.getValue());
+		} catch (NumberFormatException e) {
+			  System.out.println(e);
 		}
-
-		return Integer.parseInt(temp.getValue());
+		return 0;
+		
 	}
 
 	public static boolean isOperator(char input) {
 		return (input == '+' || input == '-' || input == '/' || input == '*' || input == '^');
 	}
 
-	private static boolean hasPrecedence(MyNode operator1, MyNode operator2) {
+	private static boolean hasPrecedence(MyNode operator1, MyNode<String> operator2) {
 		int precedence1 = getPrecedence((String) operator1.getValue());
-		int precedence2 = getPrecedence((String) operator2.getValue());
+		int precedence2 = getPrecedence(operator2.getValue());
 		return precedence1 >= precedence2;
 	}
 
@@ -106,7 +115,7 @@ public class Main {
 		}
 	}
 
-	public static MyLinkedTree createTree(String input) {
+	public static MyLinkedTree<String> createTree(String input) {
 		Stack<MyNode> operatorStack = new Stack<MyNode>();
 		Stack<MyNode> operandStack = new Stack<MyNode>();
 
@@ -114,11 +123,11 @@ public class Main {
 			char val = input.charAt(i);
 
 			if (Character.isDigit(val)) {
-				operandStack.push(new MyNode(String.valueOf(val)));
+				operandStack.push(new MyNode<String>(String.valueOf(val)));
 			} else if (isOperator(val)) {
-				MyNode node = new MyNode(String.valueOf(val));
+				MyNode<String> node = new MyNode<String>(String.valueOf(val));
 				while (!operatorStack.isEmpty() && hasPrecedence(operatorStack.peek(), node)) {
-					MyNode operator = operatorStack.pop();
+					MyNode<String> operator = operatorStack.pop();
 					operator.setRightChild(operandStack.pop());
 					operator.setLeftChild(operandStack.pop());
 					operandStack.push(operator);
@@ -127,7 +136,7 @@ public class Main {
 			}
 		}
 		while (!operatorStack.isEmpty()) {
-			MyNode operator = operatorStack.pop();
+			MyNode<String> operator = operatorStack.pop();
 			operator.setRightChild(operandStack.pop());
 			operator.setLeftChild(operandStack.pop());
 			operandStack.push(operator);

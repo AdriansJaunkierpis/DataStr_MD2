@@ -311,7 +311,6 @@ public class MyLinkedTree<T> {
 	}
 
 	private void printTreeWithText(MyNode<T> temp) throws Exception {
-		if (!isEmpty()) {
 			if (temp != null) {
 				if (temp.getValue() != null) {
 					System.out.print("Parent: " + temp.getValue());
@@ -331,6 +330,4 @@ public class MyLinkedTree<T> {
 				}
 			}
 		}
-	}
-	
 }
