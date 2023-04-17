@@ -5,7 +5,7 @@ public class MyNode<T> {
     private MyNode<T> rightChild;
     private T value;
 
-    MyNode(T myNode) {
+    public MyNode(T myNode) {
         setValue(myNode);
         this.leftChild = null;
         this.rightChild = null;

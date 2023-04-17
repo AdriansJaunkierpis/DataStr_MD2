@@ -30,6 +30,10 @@ public class MyLinkedTree<T> {
 		return this.root;
 	}
 
+	public void setRoot(MyNode<T> root) {
+		this.root = root;
+	}
+
 	public MyNode<T> retrieve(T data) {
 		if (data != null) {
 			return this.retrieve(this.root, data);
@@ -205,7 +209,7 @@ public class MyLinkedTree<T> {
 		}
 	}
 
-	private MyNode<T> getPredecessor(T temp, MyNode<T> root) throws Exception {
+	public MyNode<T> getPredecessor(T temp, MyNode<T> root) throws Exception {
 		if (temp != null) {
 			if (!isEmpty()) {
 				if (retrieve(temp) != null) {
@@ -291,18 +295,16 @@ public class MyLinkedTree<T> {
 	}
 
 	private void printTreeInOrder(MyNode<T> temp) {
-		if (!isEmpty()) {
 			if (temp != null) {
 				if (temp.getLeftChild() != null) {
-					printTreePreOrder(temp.getLeftChild());
+					printTreeInOrder(temp.getLeftChild());
 				}
 				System.out.println(temp.getValue());
 				if (temp.getRightChild() != null) {
-					printTreePreOrder(temp.getRightChild());
+					printTreeInOrder(temp.getRightChild());
 				}
 			}
 		}
-	}
 
 	public void printTreeWithText() throws Exception {
 		this.printTreeWithText(this.root);
@@ -330,4 +332,5 @@ public class MyLinkedTree<T> {
 			}
 		}
 	}
+	
 }
